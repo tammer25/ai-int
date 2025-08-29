@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
+import { useToast } from '@/hooks/use-toast';
 
 interface RegisterFormProps {
   onSubmit?: (data: RegisterFormData) => void;
@@ -27,6 +28,7 @@ export default function RegisterForm({ onSubmit, onLoginClick }: RegisterFormPro
   });
   const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,33 +47,27 @@ export default function RegisterForm({ onSubmit, onLoginClick }: RegisterFormPro
 
   const validateForm = (): boolean => {
     const newErrors: Partial<RegisterFormData> = {};
-
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
     }
-
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
     }
-
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -80,14 +76,28 @@ export default function RegisterForm({ onSubmit, onLoginClick }: RegisterFormPro
     e.preventDefault();
     
     if (!validateForm()) {
+      toast({
+        title: "Validation Error",
+        description: "Please fix the errors in the form.",
+        variant: "destructive",
+      });
       return;
     }
-
+    
     setIsLoading(true);
     try {
       await onSubmit?.(formData);
+      toast({
+        title: "Registration Successful",
+        description: "Your account has been created successfully. Welcome!",
+      });
     } catch (error) {
       console.error('Registration failed:', error);
+      toast({
+        title: "Registration Failed",
+        description: "There was an error creating your account. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -182,18 +192,19 @@ export default function RegisterForm({ onSubmit, onLoginClick }: RegisterFormPro
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button className="w-full" disabled={isLoading} type="submit">
             {isLoading ? 'Creating account...' : 'Create account'}
           </Button>
           <div className="text-center text-sm">
             Already have an account?{' '}
-            <button
+            <Button
               type="button"
               onClick={onLoginClick}
               className="text-primary hover:underline font-medium"
+              variant="link"
             >
               Sign in
-            </button>
+            </Button>
           </div>
         </CardFooter>
       </form>
