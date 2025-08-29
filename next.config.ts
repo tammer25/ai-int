@@ -1,25 +1,10 @@
-import type { NextConfig } from "next";
+const repo = 'ai-int'; // your GitHub repository name
+const isProd = process.env.NODE_ENV === 'production';
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  // 禁用 Next.js 热重载，由 nodemon 处理重编译
-  reactStrictMode: false,
-  webpack: (config, { dev }) => {
-    if (dev) {
-      // 禁用 webpack 的热模块替换
-      config.watchOptions = {
-        ignored: ['**/*'], // 忽略所有文件变化
-      };
-    }
-    return config;
-  },
-  eslint: {
-    // 构建时忽略ESLint错误
-    ignoreDuringBuilds: true,
-  },
+const nextConfig = {
+  output: 'export',
+  images: { unoptimized: true },
+  assetPrefix: isProd ? `/${repo}/` : '',
+  basePath: isProd ? `/${repo}` : '',
 };
-
 export default nextConfig;
