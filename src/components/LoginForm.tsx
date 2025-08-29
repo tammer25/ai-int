@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 
 // Form validation schema
 const loginSchema = z.object({
@@ -45,7 +45,8 @@ export function LoginForm({
   className = "",
 }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
-
+  const { toast } = useToast();
+  
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -55,8 +56,20 @@ export function LoginForm({
   });
 
   const handleSubmit = async (values: LoginFormValues) => {
-    if (onSubmit) {
-      await onSubmit(values);
+    try {
+      if (onSubmit) {
+        await onSubmit(values);
+        toast({
+          title: "Login Successful",
+          description: "Welcome back! You have been logged in successfully.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Login Failed",
+        description: "Invalid email or password. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -72,13 +85,13 @@ export function LoginForm({
       </CardHeader>
       <CardContent>
         {error && (
-          <Alert variant="destructive" className="mb-4">
+          <Alert className="mb-4" variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
             <FormField
               control={form.control}
               name="email"
@@ -145,7 +158,7 @@ export function LoginForm({
         </Button>
         <div className="text-sm text-center text-muted-foreground">
           Don't have an account?{" "}
-          <a href="#" className="font-medium text-primary hover:underline">
+          <a className="font-medium text-primary hover:underline" href="#">
             Sign up
           </a>
         </div>
