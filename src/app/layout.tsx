@@ -86,16 +86,6 @@ export const metadata: Metadata = {
   category: "Design",
   classification: "Interior Design Software",
   referrer: "origin-when-cross-origin",
-  colorScheme: "light dark",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-  ],
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
   verification: {
     // Add verification tokens when available
     // google: "your-google-verification-token",
@@ -104,6 +94,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://ai-interior-designer.com",
   },
+};
+
+// Viewport configuration moved from metadata
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
 };
 
 export default function RootLayout({
@@ -117,7 +119,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body className="antialiased bg-background text-foreground min-h-screen">
+      <body>
         <AuthProvider>
           {children}
           <Toaster />
