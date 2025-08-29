@@ -1,4 +1,17 @@
-"scripts": {
-  ...
-  "export": "next export"
+{
+  "name": "ai-int",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "export": "next export",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+    // Add other dependencies as necessary
+  }
+  // Add any additional fields like devDependencies, description, etc., but always follow JSON rules (commas, braces)
 }
