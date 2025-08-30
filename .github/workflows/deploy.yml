@@ -23,6 +23,10 @@ jobs:
           git add package-lock.json
           git diff --staged --quiet || git commit -m "chore: update package-lock.json [skip ci]"
           git push || true
+      - name: Check UI component files
+        run: |
+          chmod +x ./ci-debug-file-check.sh
+          ./ci-debug-file-check.sh
       - run: npm run build
       - run: npm run export
       - name: Deploy to GitHub Pages
