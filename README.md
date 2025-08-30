@@ -1,64 +1,25 @@
-# Modern Next.js 15 Starter
+```# ai-int
 
-A clean, minimal, and modern Next.js 15 starter template with essential tools for rapid development.
+Short description: ai-interior — TypeScript project for interior-related AI utilities.
 
-## Features
+Prerequisites
+- Node.js 18+ (or as configured in CI)
+- npm or pnpm
 
-- ⚡ **Next.js 15** - Latest features with App Router
-- 🔷 **TypeScript** - Full type safety
-- 🎨 **Tailwind CSS** - Utility-first styling
-- 🧩 **shadcn/ui** - Beautiful, accessible components
-- 🌙 **Dark Mode** - Built-in theme switching
-- 📱 **Responsive** - Mobile-first design
-- 🔧 **ESLint & Prettier** - Code formatting and linting
+Install
+- npm ci
 
-## Quick Start
+Development scripts
+- npm run build    # compile TypeScript
+- npm run lint     # run ESLint
+- npm run test     # run tests (if present)
+- npm run format   # run Prettier (if configured)
 
-```bash
-# Install dependencies
-npm install
+Contributing
+- Create a branch for your change: git checkout -b fix/your-change
+- Run lint/tests locally before opening a PR
+- Follow conventional commit style for commit messages
 
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
+License
+- MIT
 ```
-
-Open [http://localhost:3000](http://localhost:3000) to view your application.
-
-## Project Structure
-
-```
-src/
-├── app/              # Next.js App Router
-├── components/       # Reusable components
-│   └── ui/          # shadcn/ui components
-├── hooks/           # Custom React hooks
-└── lib/             # Utility functions
-```
-
-## Development
-
-This starter includes:
-
-- **Components**: Pre-built UI components with shadcn/ui
-- **Styling**: Tailwind CSS with custom configuration
-- **TypeScript**: Strict type checking
-- **Code Quality**: ESLint and Prettier configuration
-- **Dark Mode**: System preference detection with manual toggle
-
-## Deployment
-
-The easiest way to deploy is using [Vercel](https://vercel.com):
-
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Deploy automatically on every push
-
-## License
-
-MIT
