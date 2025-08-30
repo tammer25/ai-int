@@ -13,17 +13,15 @@ const updateProjectSchema = z.object({
   designerId: z.string().optional()
 })
 
-interface RouteParams {
-  params: {
-    id: string
-  }
-}
-
 // GET single project
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params
     const project = await db.project.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         client: {
           select: {
@@ -76,7 +74,6 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       message: 'Project retrieved successfully',
       project
     })
-
   } catch (error) {
     console.error('Get project error:', error)
     return NextResponse.json(
@@ -87,14 +84,18 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // PUT update project
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params
     const body = await request.json()
     const validatedData = updateProjectSchema.parse(body)
 
     // Check if project exists
     const existingProject = await db.project.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!existingProject) {
@@ -127,7 +128,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const project = await db.project.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       include: {
         client: {
@@ -155,7 +156,6 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       message: 'Project updated successfully',
       project
     })
-
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -173,11 +173,16 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 }
 
 // DELETE project
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params
+    
     // Check if project exists
     const existingProject = await db.project.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!existingProject) {
@@ -188,13 +193,12 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     await db.project.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({
       message: 'Project deleted successfully'
     })
-
   } catch (error) {
     console.error('Delete project error:', error)
     return NextResponse.json(
