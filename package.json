@@ -11,7 +11,5 @@
     "next": "^15.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
-    // Add other dependencies as necessary
   }
-  // Add any additional fields like devDependencies, description, etc., but always follow JSON rules (commas, braces)
 }
