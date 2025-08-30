@@ -14,6 +14,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+      - name: Purge cache and lock files
+        run: |
+          echo "🧹 Purging .next, node_modules, and lock files for clean build..."
+          rm -rf .next
+          rm -rf node_modules
+          rm -f package-lock.json
+          rm -f yarn.lock
+          rm -f pnpm-lock.yaml
+          echo "✅ Purge completed"
       - name: Install dependencies
         run: npm install
       - name: Auto-commit package-lock.json changes
