@@ -6,7 +6,7 @@
     "build": "next build",
     "export": "next export",
     "start": "next start",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
+    "lint": "eslint ."
   },
   "dependencies": {
     "next": "^15.0.0",
