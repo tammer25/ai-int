@@ -1,5 +1,4 @@
 name: Deploy Next.js to GitHub Pages
-
 on:
   push:
     branches:
@@ -7,18 +6,16 @@ on:
   schedule:
     # Run nightly builds at 2 AM UTC
     - cron: '0 2 * * *'
-
+  workflow_dispatch:
 # Allow one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
-
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: write  # Changed from read to write for auto-commit functionality
   pages: write
   id-token: write
-
 jobs:
   # Lint job
   lint:
@@ -62,7 +59,6 @@ jobs:
       
       - name: Run linter
         run: npm run lint
-
   # Type check job
   typecheck:
     runs-on: ubuntu-latest
@@ -105,7 +101,6 @@ jobs:
       
       - name: Run type check
         run: npm run type-check
-
   # Test job
   test:
     runs-on: ubuntu-latest
@@ -148,7 +143,6 @@ jobs:
       
       - name: Run tests
         run: npm test
-
   # Build job - depends on lint, typecheck, and test
   build:
     runs-on: ubuntu-latest
@@ -243,7 +237,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
-
   # Deployment job - depends on build
   deploy:
     environment:
