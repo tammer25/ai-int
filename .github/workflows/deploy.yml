@@ -1,21 +1,17 @@
 name: Deploy Next.js to GitHub Pages
-
 on:
   push:
     branches: [main]
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
-
 concurrency:
   group: "pages-${{ github.repository }}"
   cancel-in-progress: true
-
 permissions:
   contents: write  # Needed for auto-commit step
   pages: write
   id-token: write
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -58,7 +54,6 @@ jobs:
           status: ${{ job.status }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -100,7 +95,6 @@ jobs:
           status: ${{ job.status }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -142,7 +136,6 @@ jobs:
           status: ${{ job.status }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -171,18 +164,13 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
-
-      # Ensure build utility script is present, or run placeholder
-      # - name: Verify static export configuration
-      #   id: export-check
-      #   run: node scripts/check-static-export.js >> $GITHUB_OUTPUT
-
+      - name: Verify static export configuration
+        id: export-check
+        run: node scripts/check-static-export.js >> $GITHUB_OUTPUT
       - name: Build Next.js app
         run: npm run build
-
       - name: Export static files
         run: npm run export
-
       - name: Check output directory
         run: |
           if [ ! -d "out" ]; then
@@ -190,7 +178,6 @@ jobs:
           else
             echo "✅ Output directory './out' exists."
           fi
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -203,7 +190,6 @@ jobs:
           status: ${{ job.status }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
